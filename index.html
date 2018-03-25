@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>24 Stoic Exercises</title>
+    <meta name="description" content="Each day, view one of the 24 Stoic exercises as compiled by Massimo Pigliucci and Greg Lopez">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <style>
+      [v-cloak] {
+        display: none
+      }
+
+      body {
+        font-family: 'PT Serif', serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #222;
+      }
+
+      .content {
+        padding: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" class="" v-cloak>
+      <section class="hero is-dark">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              {{ active.name }}
+            </h1>
+            <h2 class="subtitle">
+              {{ today }}
+            </h2>
+          </div>
+        </div>
+      </section>
+      <section class="content">
+        <p class="description">{{ active.description }}</p>
+        <blockquote>
+          {{ active.quote }}
+          <cite>{{ active.source }}</cite>
+        </blockquote>
+      </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/knrz/CSV.js@3.6.4/csv.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+    <script>
+      fetch('./exercises.csv')
+      .then(function(response) {
+        return response.text();
+      })
+      .then(function(csvString) {
+        var data = new CSV(csvString, { header: true }).parse();
+
+        var app = new Vue({
+          el: '#container',
+          data: {
+            exercises: data
+          },
+          computed: {
+            active: function() {
+              var millisecondsDay = 24 * 60 * 60 * 1000;
+
+              var start = new Date(2018, 0, 12);
+              var today = new Date();
+
+              var daysSinceStart = Math.round(Math.abs((start.getTime() - today.getTime()) / millisecondsDay));
+
+              var active = daysSinceStart % 24;
+
+              return this.exercises[active];
+            },
+            today: function() {
+              var date = new Date();
+              var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+              return date.toLocaleDateString('en-GB', options);
+            }
+          }
+        });
+      }).catch(console.error);
+    </script>
+  </body>
+</html>
