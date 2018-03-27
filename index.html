@@ -70,6 +70,9 @@
               var start = new Date(2018, 0, 1);
               var today = new Date();
 
+              start.setHours(0,0,0);
+              today.setHours(0,0,0);
+
               var daysSinceStart = Math.round(Math.abs((start.getTime() - today.getTime()) / millisecondsDay));
 
               var active = daysSinceStart % 24;
