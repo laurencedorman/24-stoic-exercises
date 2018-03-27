@@ -40,7 +40,6 @@
         </div>
       </section>
       <section class="content">
-        <p class="description">{{ active.description }}</p>
         <blockquote>
           {{ active.quote }}
           <cite>{{ active.source }}</cite>
@@ -56,7 +55,7 @@
         return response.text();
       })
       .then(function(csvString) {
-        var data = new CSV(csvString, { header: true }).parse();
+        var data = new CSV(csvString, { header: true, cellDelimiter: ';' }).parse();
 
         var app = new Vue({
           el: '#container',
@@ -75,7 +74,9 @@
 
               var daysSinceStart = Math.round(Math.abs((start.getTime() - today.getTime()) / millisecondsDay));
 
-              var active = daysSinceStart % 24;
+              var active = daysSinceStart % 25;
+
+              console.log(this.exercises);
 
               return this.exercises[active];
             },
