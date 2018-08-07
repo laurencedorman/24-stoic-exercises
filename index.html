@@ -74,9 +74,7 @@
 
               var daysSinceStart = Math.round(Math.abs((start.getTime() - today.getTime()) / millisecondsDay));
 
-              var active = daysSinceStart % 25;
-
-              console.log(this.exercises);
+              var active = daysSinceStart % 24;
 
               return this.exercises[active];
             },
